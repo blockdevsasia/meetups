@@ -2,18 +2,119 @@
 marp: true
 ---
 <!--
-theme: default
+theme: base-theme
+style: |
+  section {
+    background-color: #ccc;
+    color: #FFFFFF;
+  }
+  h1 {
+    color: #09c;
+  }
+
+  header {
+    color: #ccc;
+  }
+  h2 {
+    color: #09c;
+  }
 paginate: true
 header: Blockdevs Asia: Zero-Knowledge Proofs
-backgroundImage: "linear-gradient(to bottom, #67b8e3, #0288d1)"
+backgroundImage: "url(bg_bda_ppt.jpg)"
+
 -->
+
+# Welcome!
+- I'm Caspar Oostendorp, CTO of Oost&Voort Inc.
+- We build blockchain and cloud solutions
+- For an example of what we do: We are now participating in the https://ethglobal.com/events/autonomous hackathon. Deadline is in 3 days!
+- I made this presentation to educate others, and to force myself to understand this topic better. If you want to try that sometime, let us know!
+
+---
+
+<!-- header: Current events -->
+
+
+
+# Some current events..
+
+- [It was a data leak, not a breach or a hack – PNP](https://newsinfo.inquirer.net/1761100/pnp-it-was-a-data-leak-not-a-breach-or-a-hack)
+- [Update on alleged law enforcement data leak in Philippines. Data of nearly 1.5 million American Bar Association members compromised.](https://thecyberwire.com/newsletters/privacy-briefing/5/78)
+- [Don’t collect data you can’t protect: Philippine privacy commissioner](https://asianews.network/dont-collect-data-you-cant-protect-philippine-privacy-commissioner/)
+
+    “We would also like to have this opportunity to remind those who process personal data that they concomitantly have the duty to protect the data they collect. Do not collect if you can’t protect,” Naga added.
+
+---
+
+# We are oversharing:
+- Proving age: Showing drivers license. Only the birth date being BEFORE a certain date matters, but you're sharing much more than that.
+- Proving citizenship: Many will copy your ID or passport, even though most of it is none of their business and can even leak and be abused.
+- Proving funds: Right now we share a bank statement with current balance, even though the only info needed is that we have funds ABOVE a certain amount.
+- Diplomatic: Countries that want to prove they have no nuclear weapons, without needing to expose their actual arsenal
+
+
+
+---
+<!-- header: Important terms -->
+
+# Some important terms before we begin
+
+--- 
+
+## What is Blockchain?
+
+---
+
+Blockchain is a decentralized technology that enables secure and transparent recording of transactions or data across multiple computers. It eliminates the need for a central authority and ensures data integrity and immutability. It has applications in various industries, including finance, supply chain, and voting systems.
+
+---
+
+## What is Ethereum?
+
+---
+
+Ethereum is a decentralized blockchain platform for creating and running smart contracts. It enables developers to build applications and organizations that operate without central authorities. Ethereum's cryptocurrency, Ether (ETH), powers the network and incentivizes participants. Its programmable nature has led to broad adoption in various industries, including finance, gaming, and DeFi.
+
+---
+
+## What is an Algorithm?
+
+---
+
+An algorithm is a set of step-by-step instructions or rules used to solve a problem or perform a specific task. It is a precise sequence of actions that takes inputs and produces outputs. 
+They form the foundation of computer programs, guiding the logic and operations necessary to achieve desired outcomes. 
+
+---
+
+## What is Elliptic Curve Cryptography?
+
+---
+
+Elliptic Curve Cryptography (ECC) is a cryptographic algorithm that uses the mathematics of elliptic curves to provide secure communication and encryption. It offers strong security with shorter key lengths compared to traditional encryption algorithms like RSA. ECC operates on the principle that it is computationally difficult to solve certain mathematical problems related to elliptic curves.
+
+---
+
+## What is Public Key and Private Key cryptography?
+
+---
+Public Key and Private Key cryptography, also known as asymmetric cryptography, is a cryptographic system that uses a pair of keys to encrypt and decrypt data. The keys are mathematically related but asymmetric, meaning that data encrypted with one key can only be decrypted with the corresponding key from the pair. The public key is freely shared and used for encryption, while the private key is kept secret and used for decryption. This system allows secure communication and authentication without the need for a shared secret key. 
+
+---
+
+## What is a Hash Function?
+
+---
+
+A function that can be used to map data of arbitrary size to data of fixed size. The values returned by a hash function are called hash values, hash codes, or simply hashes. They are extensively used in blockchain technology.
+
+---
 
 # An Overview of Zero-Knowledge Proofs
 ## How They Work and Why They Matter
 
-Based on [https://ethereum.org/en/zero-knowledge-proofs/](https://ethereum.org/en/zero-knowledge-proofs/)
  
 ---
+<!-- header: What are zero-knowledge proofs? -->
 ## What are zero-knowledge proofs?
 
 A zero-knowledge proof is a way of proving the validity of a statement without revealing the statement itself. The ‘prover’ is the party trying to prove a claim, while the ‘verifier’ is responsible for validating the claim.
@@ -27,86 +128,88 @@ Zero-knowledge proofs first appeared in a 1985 paper, “[The knowledge complexi
 Zero-knowledge proofs have improved over the years and they are now being
 used in several real-world applications.
 
---- 
-
-<!-- header: Why do we need zero-knowledge proofs -->
-## Why do we need zero-knowledge proofs?
----
-
-### Practical issues today
-- Proving age: Showing drivers license. Only the birth date being BEFORE a certain date matters, but you're sharing much more than that.
-- Proving citizenship: Many will copy your ID or passport, even though most of it is none of their business and can even leak and be abused.
-- Proving funds: Right now we share a bank statement with current balance, even though the only info needed is that we have funds ABOVE a certain amount.
-- Diplomatic: Countries that have to prove they have no nuclear weapons, without needing to disclose their actual arsenal
-
---- 
-Zero-knowledge proofs represented a breakthrough in applied cryptography, as they promised to improve security of information for individuals. Consider how you might prove a claim (e.g., “I am a citizen of X country”) to another party (e.g., a service provider). You’d need to provide “evidence” to back up your claim, such as a national passport or driver’s license.
-
---- 
-But there are problems with this approach, chiefly the lack of privacy. Personally Identifiable Information (PII) shared with third-party services is stored in central databases, which are vulnerable to hacks. With identity theft becoming a critical issue, there are calls for more privacy-protecting means of sharing sensitive information.
-
-Zero-knowledge proofs solve this problem by eliminating the need to reveal information to prove validity of claims. The zero-knowledge protocol uses the statement (called a ‘witness’) as input to generate a succinct proof of its validity. This proof provides strong guarantees that a statement is true without exposing the information used in creating it.
-
---- 
-Going back to our earlier example, the only evidence you need to prove your citizenship claim is a zero-knowledge proof. The verifier only has to check if certain properties of the proof hold true to be convinced that the underlying statement holds true as well.
 
 --- 
 <!-- header: How do zero-knowledge proofs work? -->
 ## How do zero-knowledge proofs work?
+
+### Interactive vs Non-interactive
+- Interactive: **Prover** performs a random test on request of **Verifier**, and every time it gives expected outcome, it is more convicing the **Prover** is not faking it
+- Non-Interactive: **Prover** and **Verifier** agree on a set of rules that a system need to follow. Every time **Prover** uses the system, hash-based proofs are generated by the system. Since both trust the system, **Verifier** can check if the proofs are aligned with a properly functioning system, while the actual input/output stay hidden.
+
 --- 
+<!-- header: How do zero-knowledge proofs work? - Interactive -->
+### Interactive 
+
+
+A good example that illustrates how interactive proofs work is Jean-Jacques Quisquater’s famous [Ali Baba cave story](https://en.wikipedia.org/wiki/Zero-knowledge_proof#The_Ali_Baba_cave). In the story, Peggy (the prover) wants to prove to Victor (the verifier) that she knows the secret phrase to open a magic door without revealing the phrase.
+
+---
+
+![height:600px](2023-05-20_11-29.png)
+
+---
+
 A zero-knowledge proof allows you to prove the truth of a statement without sharing the statement’s contents or revealing how you discovered the truth. To make this possible, zero-knowledge protocols rely on algorithms that take some data as input and return ‘true’ or ‘false’ as output.
 
 A zero-knowledge protocol must satisfy the following criteria:
 
 --- 
-1. **Completeness**: If the input is valid, the zero-knowledge protocol always returns ‘true’. Hence, if the underlying statement is true, and the prover and verifier act honestly, the proof can be accepted.
+1. **Completeness**: If the input is valid, the zero-knowledge protocol always returns ‘true’. Hence, if the underlying statement is true, and the **Prover** and **Verifier** act honestly, the proof can be accepted.
 
-2. **Soundness**: If the input is invalid, it is theoretically impossible to fool the zero-knowledge protocol to return ‘true’. Hence, a lying prover cannot trick an honest verifier into believing an invalid statement is valid (except with a tiny margin of probability).
+2. **Soundness**: If the input is invalid, it is theoretically impossible to fool the zero-knowledge protocol to return ‘true’. Hence, a lying **Prover** cannot trick an honest **Verifier** into believing an invalid statement is valid (except with a tiny margin of probability).
 
-3. **Zero-knowledge**: The verifier learns nothing about a statement beyond its validity or falsity (they have “zero knowledge” of the statement). This requirement also prevents the verifier from deriving the original input (the statement’s contents) from the proof.
+3. **Zero-knowledge**: The **Verifier** learns nothing about a statement beyond its validity or falsity (they have “zero knowledge” of the statement). This requirement also prevents the **Verifier** from deriving the original input (the statement’s contents) from the proof.
 
 --- 
 In basic form, a zero-knowledge proof is made up of three elements: **witness**, **challenge**, and **response**.
 
 --- 
-- **Witness**: With a zero-knowledge proof, the prover wants to prove knowledge of some hidden information. The secret information is the “witness” to the proof, and the prover's assumed knowledge of the witness establishes a set of questions that can only be answered by a party with knowledge of the information. Thus, the prover starts the proving process by randomly choosing a question, calculating the answer, and sending it to the verifier.
+- **Witness**: With a zero-knowledge proof, the **Prover** wants to prove knowledge of some hidden information. The secret information is the “witness” to the proof, and the **Prover**'s assumed knowledge of the witness establishes a set of questions that can only be answered by a party with knowledge of the information. Thus, the **Prover** starts the proving process by randomly choosing a question, calculating the answer, and sending it to the **Verifier**.
 
 --- 
-- **Challenge**: The verifier randomly picks another question from the set and asks the prover to answer it.
+- **Challenge**: The **Verifier** randomly picks another question from the set and asks the **Prover** to answer it.
 
 --- 
-- **Response**: The prover accepts the question, calculates the answer, and returns it to the verifier. The prover’s response allows the verifier to check if the former really has access to the witness. To ensure the prover isn’t guessing blindly and getting the correct answers by chance, the verifier picks more questions to ask. By repeating this interaction many times, the possibility of the prover faking knowledge of the witness drops significantly until the verifier is satisfied.
+- **Response**: The **Prover** accepts the question, calculates the answer, and returns it to the **Verifier**. The **Prover** response allows the **Verifier** to check if the former really has access to the witness. To ensure the **Prover** isn’t guessing blindly and getting the correct answers by chance, the **Verifier** picks more questions to ask. By repeating this interaction many times, the possibility of the **Prover** faking knowledge of the witness drops significantly until the **Verifier** is satisfied.
 
 --- 
 The above describes the structure of an ‘interactive zero-knowledge proof’. Early zero-knowledge protocols used interactive proving, where verifying the validity of a statement required back-and-forth communication between provers and verifiers.
 
---- 
-A good example that illustrates how interactive proofs work is Jean-Jacques Quisquater’s famous [Ali Baba cave story](https://en.wikipedia.org/wiki/Zero-knowledge_proof#The_Ali_Baba_cave). In the story, Peggy (the prover) wants to prove to Victor (the verifier) that she knows the secret phrase to open a magic door without revealing the phrase.
+
 
 --- 
+<!-- header: How do zero-knowledge proofs work? - Non-interactive -->
 ### Non-interactive zero-knowledge proofs 
 
-While revolutionary, interactive proving had limited usefulness since it required the two parties to be available and interact repeatedly. Even if a verifier was convinced of a prover’s honesty, the proof would be unavailable for independent verification (computing a new proof required a new set of messages between the prover and verifier).
+Non-interactive zero-knowledge proofs are cryptographic primitives, where information between a **Prover** and a **Verifier** can be authenticated by the **Prover**, without revealing any of the specific information beyond the validity of the statement itself. This function of encryption makes direct communication between the **Prover** and **Verifier** unnecessary, effectively removing any intermediaries. 
+
+
+The core trustless cryptography "proofing" involves a hash function generation of a random number, constrained within mathematical parameters (primarily to modulate hashing difficulties) determined by the **Prover** and **Verifier**.
+
+---
+
+
+The key advantage of non-interactive zero-knowledge proofs is that they can be used in situations where there is no possibility of interaction between the **Prover** and **Verifier**, such as in online transactions where the two parties are not able to communicate in real time. This makes non-interactive zero-knowledge proofs particularly useful in decentralized systems like blockchains, where transactions are verified by a network of nodes and there is no central authority to oversee the verification process.[2]
+
+---
+
+Most non-interactive zero-knowledge proofs are based on mathematical constructs like elliptic curve cryptography or pairing-based cryptography, which allow for the creation of short and easily verifiable proofs of the truth of a statement. Unlike interactive zero-knowledge proofs, which require multiple rounds of interaction between the **Prover** and **Verifier**, non-interactive zero-knowledge proofs are designed to be efficient and can be used to verify a large number of statements simultaneously.
+
 
 --- 
-To solve this problem, Manuel Blum, Paul Feldman, and Silvio Micali suggested the first [non-interactive zero-knowledge proofs](https://dl.acm.org/doi/10.1145/62212.62222) where the prover and verifier have a shared key. This allows the prover to demonstrate their knowledge of some information (i.e., witness) without providing the information itself.
 
---- 
-Unlike interactive proofs, noninteractive proofs required only one round of communication between participants (prover and verifier). The prover passes the secret information to a special algorithm to compute a zero-knowledge proof. This proof is sent to the verifier, who checks that the prover knows the secret information using another algorithm.
-
---- 
-Non-interactive proving reduces communication between prover and verifier, making ZK-proofs more efficient. Moreover, once a proof is generated, it is available for anyone else (with access to the shared key and verification algorithm) to verify.
-
---- 
-Non-interactive proofs represented a breakthrough for zero-knowledge technology and spurred the development of proving systems used today. We discuss these proof types below:
-
---- 
-### Types of zero-knowledge proofs
+### Examples of non-interactive zero-knowledge proof systems
 
 --- 
 #### ZK-SNARKs
 
-ZK-SNARK is an acronym for **Zero-Knowledge Succinct Non-Interactive Argument of Knowledge**. The ZK-SNARK protocol has the following qualities:
+- ZK-SNARK is an acronym for **Zero-Knowledge Succinct Non-Interactive Argument of Knowledge**. 
+- Used in for example: ZCash, ZKSync
+
+The ZK-SNARK protocol has the following qualities:
+
+---
 
 - **Zero-knowledge**: A verifier can validate the integrity of a statement without knowing anything else about the statement. The only knowledge the verifier has of the statement is whether it is true or false.
 
@@ -114,10 +217,9 @@ ZK-SNARK is an acronym for **Zero-Knowledge Succinct Non-Interactive Argument of
 
 - **Non-interactive**: The proof is ‘non-interactive’ because the prover and verifier only interact once, unlike interactive proofs that require multiple rounds of communication.
 
---- 
 - **Argument**: The proof satisfies the ‘soundness’ requirement, so cheating is extremely unlikely.
 
-- **(Of) Knowledge**: The zero-knowledge proof cannot be constructed without access to the secret information (witness). It is difficult, if not impossible, for a prover who doesn’t have the witness to compute a valid zero-knowledge proof.
+- **(Of) Knowledge**: The proof cannot be constructed without access to the secret information (witness). It is difficult, if not impossible, for a prover who doesn’t have the witness to compute a valid zero-knowledge proof.
 
 --- 
 The ‘shared key’ mentioned earlier refers to public parameters that the prover and verifier agree to use in generating and verifying proofs. Generating the public parameters (collectively known as the Common Reference String (CRS)) is a sensitive operation because of its importance in the protocol’s security. If the entropy (randomness) used in generating the CRS gets into the hands of a dishonest prover, they can compute false proofs.
@@ -128,18 +230,21 @@ The ‘shared key’ mentioned earlier refers to public parameters that the prov
 --- 
 Trusted setups require users to trust the participants in parameter-generation. However, the development of ZK-STARKs has enabled proving protocols that work with a non-trusted setup.
 
---- 
+---
+
 #### ZK-STARKs
 
 ZK-STARK is an acronym for **Zero-Knowledge Scalable Transparent Argument of Knowledge**. ZK-STARKs are similar to ZK-SNARKs, except that they are:
 
 --- 
+
 - **Scalable**: ZK-STARK is faster than ZK-SNARK at generating and verifying proofs when the size of the witness is larger. With STARK proofs, prover and verification times only slightly increase as the witness grows (SNARK prover and verifier times increase linearly with witness size).
 
 - **Transparent**: ZK-STARK relies on publicly verifiable randomness to generate public parameters for proving and verification instead of a trusted setup. Thus, they are more transparent compared to ZK-SNARKs.
 
 --- 
 ZK-STARKs produce larger proofs than ZK-SNARKs meaning they generally have higher verification overheads. However, there are cases (such as proving large datasets) where ZK-STARKs may be more cost-effective than ZK-SNARKs.
+
 
 --- 
 <!--header: Use-cases for zero-knowledge proofs -->
@@ -170,7 +275,6 @@ Zero-knowledge proofs are also being applied to anonymizing transactions on publ
 
 Current identity management systems put personal information at risk. Zero-knowledge proofs can help individuals validate identity whilst protecting sensitive details.
 
---- 
 Zero-knowledge proofs are particularly useful in the context of [decentralized identity](/decentralized-identity/). Decentralized identity (also described as ‘self-sovereign identity’) gives the individual the ability to control access to personal identifiers. Proving your citizenship without revealing your tax ID or passport details is a good example of how zero-knowledge technology enables decentralized identity.
 
 --- 
@@ -186,7 +290,6 @@ Zero-knowledge proofs, however, can simplify authentication for both platforms a
 
 Verifiable computation is another application of zero-knowledge technology for improving blockchain designs. Verifiable computing allows us to outsource computation to another entity while maintaining verifiable results. The entity submits the result along with a proof verifying that the program was executed correctly.
 
---- 
 Verifiable computation is critical to improving processing speeds on blockchains without reducing security. Understanding this requires knowing the differences in proposed solutions for scaling Ethereum.
 
 --- 
@@ -260,9 +363,20 @@ ZK-SNARK uses elliptic curve cryptography ([ECDSA](/glossary/#ecdsa)) for encryp
 
 ZK-STARK is considered immune to the threat of quantum computing, as it uses collision-resistant hashes for encryption. Unlike public-private key pairings used in elliptic curve cryptography, collision-resistant hashing is more difficult for quantum computing algorithms to break.
 
---- 
-## Further reading {#further-reading}
 
+---
+
+# Wrapping up 
+- Non-interactive Zero-knowledge Proofs (NIZK) are the future!
+- This presentation is shared online at https://github.com/blockdevsasia/meetups/tree/main/2023-05-20
+
+
+- Any Questions?
+
+---
+
+## Further reading
+- https://cointelegraph.com/explained/zk-starks-vs-zk-snarks-explained
 - [Computer Scientist Explains One Concept in 5 Levels of Difficulty | WIRED](https://www.youtube.com/watch?v=fOGdb1CTu5c) - _Wired YouTube channel_
 - [Overview of use cases for zero-knowledge proofs](https://appliedzkp.org/#Projects) — _Privacy and Scaling Explorations Team_
 - [SNARKs vs. STARKS vs. Recursive SNARKs](https://www.alchemy.com/overviews/snarks-vs-starks) — _Alchemy Overviews_
